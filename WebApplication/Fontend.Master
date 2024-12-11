@@ -1,0 +1,62 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Fontend.Master.cs" Inherits="WebApplication.Fontend" %>
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <table width="1024" border="1" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td colspan="3" bgcolor="#FFFFFF" align="center" valign="middle">
+        <asp:Image ID="Image1" runat="server" ImageUrl="~/Image/Arcane-Savior-Viktor.png" />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="97"><a href="WebFormMain.aspx">Trang chủ</a></td>
+        <td width="97"><a href="#">Đào tạo</a></td>
+        <td width="90"><a href="#">Phòng ban</a></td>
+        <td width="113"><a href="#">Giới thiệu</a></td>
+        <td width="623"><a href="#">Liên hệ</a></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td width="230"><p><strong>Vùng hiển thị menu</strong></p>
+      <p>
+          <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/View/WebFormSinhVien.aspx">Quản lý sinh viên</asp:HyperLink>
+        </p>
+      <p>
+          <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/View/WebFormMonHoc.aspx">Quản lý môn học</asp:HyperLink>
+        </p>
+      <p>
+          <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/View/WebFormKhoa.aspx">Quản lý khoa</asp:HyperLink>
+        </p>
+      <p>
+          <asp:HyperLink ID="HyperLink4" runat="server" NavigateUrl="~/View/WebFormDangKyHoc.aspx">Quản lý đăng ký học</asp:HyperLink>
+        </p>
+    <p>
+        <asp:HyperLink ID="HyperLink5" runat="server" NavigateUrl="~/WebForm1.aspx">Test</asp:HyperLink>
+        </p>
+    <p>&nbsp;</p>
+    </td>
+    <td width="576" align="center"><strong>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder2" runat="server">
+            <p>
+                Vùng hiển thị nội dung</p>
+           
+        </asp:ContentPlaceHolder>
+        </strong></td>
+    <td width="210" align="center" valign="top"><strong>Vùng Quảng cáo</strong></td>
+  </tr>
+  <tr>
+    <td colspan="3" align="center"><p>Copyright</p></td>
+  </tr>
+</table>
+    </form>
+</body>
+</html>
