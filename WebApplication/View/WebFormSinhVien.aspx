@@ -27,7 +27,8 @@
     <asp:Label ID="Label6" runat="server" Text="Địa chỉ"></asp:Label>
     <asp:TextBox ID="txbAddress" runat="server"></asp:TextBox>
     <br>
-    <asp:Button ID="btnGhi" runat="server" Text="Ghi lại" OnClick="btnGhi_Click" />
+    <asp:Button ID="btnInsert" runat="server" OnClick="btnInsert_Click" Text="Thêm" />
+    <asp:Button ID="btnGhi" runat="server" Text="Cập nhật" OnClick="btnGhi_Click" />
     <asp:Button ID="btnDelete" runat="server" Text="Xóa" />
     <br>
     <asp:Label ID="lblMessage" runat="server" ForeColor="Red"></asp:Label>

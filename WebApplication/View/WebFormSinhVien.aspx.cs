@@ -49,30 +49,30 @@ namespace WebApplication.View
             }
         }
 
-        protected void GridView2_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            using (SqlConnection mySqlConnection = new SqlConnection(strCon))
-            {
-                mySqlConnection.Open();
-                int row = int.Parse(e.CommandArgument.ToString());
-                if (e.CommandName == "Edit")
-                {
-                    txbMaSV.Text = GridView2.Rows[row].Cells[1].Text;
-                    txbName.Text = GridView2.Rows[row].Cells[2].Text;
-                    txbAddress.Text = GridView2.Rows[row].Cells[3].Text;
-                    txbDate.Text = GridView2.Rows[row].Cells[4].Text;
-                    txbClass.Text = GridView2.Rows[row].Cells[5].Text;
-                }
-                else if (e.CommandName == "Delete")
-                {
-                    string s = GridView2.Rows[row].Cells[1].ToString();
-                    string sSql = "DELETE FROM SinhVien WHERE N'" + s + "'";
-                    SqlCommand mySqlCommand = new SqlCommand(sSql,mySqlConnection);
-                    mySqlCommand.ExecuteNonQuery();
-                    DropDownList1_SelectedIndexChanged(sender, e);
-                }
-            }
-        }
+        //protected void GridView2_RowCommand(object sender, GridViewCommandEventArgs e)
+        //{
+        //    using (SqlConnection mySqlConnection = new SqlConnection(strCon))
+        //    {
+        //        mySqlConnection.Open();
+        //        int row = int.Parse(e.CommandArgument.ToString());
+        //        if (e.CommandName == "Edit")
+        //        {
+        //            txbMaSV.Text = GridView2.Rows[row].Cells[0].Text;
+        //            txbName.Text = GridView2.Rows[row].Cells[1].Text;
+        //            txbAddress.Text = GridView2.Rows[row].Cells[2].Text;
+        //            txbDate.Text = GridView2.Rows[row].Cells[3].Text;
+        //            txbClass.Text = GridView2.Rows[row].Cells[4].Text;
+        //        }
+        //        else if (e.CommandName == "Delete")
+        //        {
+        //            string s = GridView2.Rows[row].Cells[1].ToString();
+        //            string sSql = "DELETE FROM SinhVien WHERE MaSV= N'" + s + "'";
+        //            SqlCommand mySqlCommand = new SqlCommand(sSql,mySqlConnection);
+        //            mySqlCommand.ExecuteNonQuery();
+        //            DropDownList1_SelectedIndexChanged(sender, e);
+        //        }
+        //    }
+        //}
 
         protected void btnGhi_Click(object sender, EventArgs e)
         {
@@ -128,7 +128,9 @@ namespace WebApplication.View
             txbMaSV.Text = GridView2.Rows[rowIndex].Cells[0].Text.Trim();
             txbName.Text = GridView2.Rows[rowIndex].Cells[1].Text.Trim();
             txbAddress.Text = GridView2.Rows[rowIndex].Cells[2].Text.Trim();
-            txbDate.Text = GridView2.Rows[rowIndex].Cells[3].Text.Trim();
+            txbDate.Text = DateTime.TryParse(GridView2.Rows[rowIndex].Cells[3].Text.Trim(), out DateTime ngaySinh)
+    ? ngaySinh.ToString("dd/MM/yyyy") // Hoặc định dạng phù hợp
+    : "";
             txbClass.Text = GridView2.Rows[rowIndex].Cells[4].Text.Trim();
         }
 
@@ -153,6 +155,60 @@ namespace WebApplication.View
                     mySqlCommand.ExecuteNonQuery();
                 }
             }
+            SinhVienLoad();
+        }
+
+        protected void btnInsert_Click(object sender, EventArgs e)
+        {
+            // Kiểm tra nếu không nhập mã sinh viên thì không thực hiện
+            if (string.IsNullOrWhiteSpace(txbMaSV.Text))
+            {
+                lblMessage.Text = "Mã sinh viên không được để trống!";
+                return;
+            }
+
+            using (SqlConnection mySqlConnection = new SqlConnection(strCon))
+            {
+                try
+                {
+                    mySqlConnection.Open();
+
+                    // Câu lệnh SQL dạng INSERT INTO
+                    string query = "INSERT INTO SinhVien (MaSV, MaKhoa, LopBC, HoTen, NgaySinh, DiaChi) " +
+                                   "VALUES (@MaSV, @MaKhoa, @LopBC, @HoTen, @NgaySinh, @DiaChi)";
+
+                    using (SqlCommand mySqlCommand = new SqlCommand(query, mySqlConnection))
+                    {
+                        // Gán tham số cho câu truy vấn
+                        mySqlCommand.Parameters.AddWithValue("@MaSV", txbMaSV.Text.Trim());
+                        mySqlCommand.Parameters.AddWithValue("@MaKhoa", DropDownList1.SelectedValue);
+                        mySqlCommand.Parameters.AddWithValue("@LopBC", txbClass.Text.Trim());
+                        mySqlCommand.Parameters.AddWithValue("@HoTen", txbName.Text.Trim());
+                        mySqlCommand.Parameters.AddWithValue("@NgaySinh", txbDate.Text.Trim());
+                        mySqlCommand.Parameters.AddWithValue("@DiaChi", txbAddress.Text.Trim());
+
+                        // Thực thi lệnh SQL
+                        int rowsAffected = mySqlCommand.ExecuteNonQuery();
+
+                        // Hiển thị thông báo dựa trên kết quả
+                        if (rowsAffected > 0)
+                        {
+                            lblMessage.Text = "Thêm sinh viên thành công!";
+                        }
+                        else
+                        {
+                            lblMessage.Text = "Không thể thêm sinh viên!";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi và hiển thị thông báo
+                    lblMessage.Text = "Đã xảy ra lỗi: " + ex.Message;
+                }
+            }
+
+            // Tải lại danh sách sinh viên nếu cần
             SinhVienLoad();
         }
 
